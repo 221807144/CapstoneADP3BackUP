@@ -3,7 +3,9 @@ package za.ac.cput.Domain.Registrations;
      Author: Sibahle shange (222529571)*/
 
 import jakarta.persistence.*;
+import za.ac.cput.Domain.User.Applicant;
 import za.ac.cput.Domain.bookings.VehicleDisc;
+import za.ac.cput.Domain.payment.Payment;
 import za.ac.cput.Domain.payment.Ticket;
 
 import java.util.List;
@@ -19,6 +21,9 @@ public class Vehicle {
     private String vehicleModel;
     private String vehicleYear;
     private String vehicleColor;
+    @Column(unique = true, nullable = false)
+    private String licensePlate;
+    private String engineNumber;
 
 
 @OneToOne(cascade = CascadeType.ALL)
@@ -29,7 +34,15 @@ public class Vehicle {
     @JoinColumn(name = "vehicle_id")
     private List<Ticket> ticket;
 
-//    @OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
+    @ManyToOne
+    @JoinColumn(name = "applicant_id", nullable = false)
+    private Applicant applicant;
+
+    //    @OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
 //    private List<Ticket> ticket;
 //
     public Vehicle() {
@@ -43,7 +56,11 @@ public class Vehicle {
         this.vehicleYear = builder.vehicleYear;
         this.vehicleColor = builder.vehicleColor;
         this.vehicleDisc = builder.vehicleDisc;
+        this.licensePlate = builder.licensePlate;
+        this.engineNumber = builder.engineNumber;
         this.ticket = builder.ticket;
+        this.payment = builder.payment;
+        this.applicant = builder.applicant;
 
     }
 
@@ -78,6 +95,22 @@ public class Vehicle {
         return ticket;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public String getEngineNumber() {
+        return engineNumber;
+    }
+
+    public Applicant getApplicant() {
+        return applicant;
+    }
+
     @Override
     public String toString() {
         return "Vehicle{" +
@@ -87,11 +120,14 @@ public class Vehicle {
                 ", vehicleModel='" + vehicleModel + '\'' +
                 ", vehicleYear='" + vehicleYear + '\'' +
                 ", vehicleColor='" + vehicleColor + '\'' +
+                ", licensePlate='" + licensePlate + '\'' +
+                ", engineNumber='" + engineNumber + '\'' +
                 ", vehicleDisc=" + vehicleDisc +
                 ", ticket=" + ticket +
+                ", payment=" + payment +
+                ", applicant=" + applicant +
                 '}';
     }
-
 
     public static class Builder{
         private int vehicleID;
@@ -102,6 +138,10 @@ public class Vehicle {
         private String vehicleColor;
         private VehicleDisc vehicleDisc;
         private List<Ticket> ticket;
+        private Payment payment;
+        private Applicant applicant;
+        private String licensePlate;
+        private String engineNumber;
 
         public Builder setVehicleID(int vehicleID) {
             this.vehicleID = vehicleID;
@@ -143,6 +183,26 @@ public class Vehicle {
             return this;
         }
 
+        public Builder setPayment(Payment payment) {
+            this.payment = payment;
+            return this;
+        }
+
+        public Builder setApplicant(Applicant applicant) {
+            this.applicant = applicant;
+            return this;
+        }
+
+        public Builder setLicensePlate(String licensePlate) {
+            this.licensePlate = licensePlate;
+            return this;
+        }
+
+        public Builder setEngineNumber(String engineNumber) {
+            this.engineNumber = engineNumber;
+            return this;
+        }
+
         public Builder copy(Vehicle vehicle) {
             this.vehicleID = vehicle.vehicleID;
             this.vehicleName = vehicle.vehicleName;
@@ -151,7 +211,12 @@ public class Vehicle {
             this.vehicleYear = vehicle.vehicleYear;
             this.vehicleColor = vehicle.vehicleColor;
             this.vehicleDisc = vehicle.vehicleDisc;
-            ticket = vehicle.ticket;
+            this.licensePlate = vehicle.licensePlate;
+            this.engineNumber = vehicle.engineNumber;
+            this.ticket = vehicle.ticket;
+            this.payment = vehicle.payment;
+            this.applicant = vehicle.applicant;
+
             return this;
         }
         public Vehicle build() {

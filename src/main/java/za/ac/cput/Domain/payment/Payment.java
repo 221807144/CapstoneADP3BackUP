@@ -16,9 +16,15 @@ public class Payment {
     private int paymentId;
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
-    private String paymentMethod, paymentDetails;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+    private String paymentDetails;
     private double paymentAmount;
     private LocalDate paymentDate;
+    private String cardName;
+    private long cardNumber;
+    private LocalDate cardDate;
+    private short cvs;
 
     public Payment() {
     }
@@ -29,6 +35,10 @@ public class Payment {
         this.paymentDetails = builder.paymentDetails;
         this.paymentAmount = builder.paymentAmount;
         this.paymentDate = builder.paymentDate;
+        this.cardName = builder.cardName;
+        this.cardNumber = builder.cardNumber;
+        this.cardDate = builder.cardDate;
+        this.cvs = builder.cvs;
     }
 
     public int getPaymentId() {
@@ -39,7 +49,7 @@ public class Payment {
         return paymentType;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
@@ -55,6 +65,22 @@ public class Payment {
         return paymentDate;
     }
 
+    public LocalDate getCardDate() {
+        return cardDate;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public long getCardNumber() {
+        return cardNumber;
+    }
+
+    public short getCvs() {
+        return cvs;
+    }
+
     @Override
     public String toString() {
         return "Payments{" +
@@ -64,35 +90,40 @@ public class Payment {
                 ", paymentDetails='" + paymentDetails + '\'' +
                 ", paymentAmount=" + paymentAmount +
                 ", paymentDate=" + paymentDate +
+                ", cardName='" + cardName + '\'' +
+                ", cardNumber=" + cardNumber +
+                ", cardDate=" + cardDate +
+                ", cvs=" + cvs +
                 '}';
     }
+
     public static class Builder {
         private int paymentId;
         private PaymentType paymentType;
-        private String paymentMethod;
+        private PaymentMethod paymentMethod;
         private String paymentDetails;
         private double paymentAmount;
         private LocalDate paymentDate;
-
-        public Builder setPaymentId(int paymentId) {
-            this.paymentId = paymentId;
-            return this;
-        }
+        private String cardName;
+        private long cardNumber;
+        private LocalDate cardDate;
+        private short cvs;
 
         public Builder setPaymentType(PaymentType paymentType) {
             this.paymentType = paymentType;
+            this.paymentDetails = paymentType.getPaymentDetails();
             return this;
         }
 
-        public Builder setPaymentMethod(String paymentMethod) {
+        public Builder setPaymentMethod(PaymentMethod paymentMethod) {
             this.paymentMethod = paymentMethod;
             return this;
         }
 
-        public Builder setPaymentDetails(String paymentDetails) {
-            this.paymentDetails = paymentDetails;
-            return this;
-        }
+//        public Builder setPaymentDetails(String paymentDetails) {
+//            this.paymentDetails = paymentDetails;
+//            return this;
+//        }
 
         public Builder setPaymentAmount(double paymentAmount) {
             this.paymentAmount = paymentAmount;
@@ -104,6 +135,26 @@ public class Payment {
             return this;
         }
 
+        public Builder setCardDate(LocalDate cardDate) {
+            this.cardDate = cardDate;
+            return this;
+        }
+
+        public Builder setCardName(String cardName) {
+            this.cardName = cardName;
+            return this;
+        }
+
+        public Builder setCardNumber(long cardNumber) {
+            this.cardNumber = cardNumber;
+            return this;
+        }
+
+        public Builder setCvs(short cvs) {
+            this.cvs = cvs;
+            return this;
+        }
+
         public Builder copy(Payment payment) {
             this.paymentId = payment.paymentId;
             this.paymentType = payment.paymentType;
@@ -111,13 +162,39 @@ public class Payment {
             this.paymentDetails = payment.paymentDetails;
             this.paymentAmount = payment.paymentAmount;
             this.paymentDate = payment.paymentDate;
+            this.cardName = payment.cardName;
+            this.cardNumber = payment.cardNumber;
+            this.cvs = payment.cvs;
+            this.cardDate = payment.cardDate;
             return this;
         }
-       public Payment build() {
+
+        public Payment build() {
             return new Payment(this);
         }
-
-
     }
 
+    public enum PaymentType {
+        Ticket("Payment for ticket."),
+        Booking("Payment for booking."),
+        Disc("Payment for vehicle disc."),;
+
+        private final String PaymentDetails;
+
+        PaymentType(String paymentDetails) {
+            PaymentDetails = paymentDetails;
+        }
+
+        public String getPaymentDetails() {
+            return PaymentDetails;
+        }
+
+    }
+    public enum PaymentMethod{
+        Card,
+        Cash();
+    }
 }
+
+
+

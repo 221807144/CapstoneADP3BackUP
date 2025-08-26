@@ -30,7 +30,6 @@ public class PaymentService implements IPaymentService {
         return paymentRepository.findById(integer).orElse(null);
     }
 
-    @Deprecated
     @Override
     public Payment update(Payment payment) {
         if (paymentRepository.existsById(payment.getPaymentId())) {

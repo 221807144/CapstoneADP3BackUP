@@ -75,11 +75,6 @@ public class Ticket {
             return this;
         }
 
-        public Builder setTicketAmount(double ticketAmount) {
-            this.ticketAmount = ticketAmount;
-            return this;
-        }
-
         public Builder setTicketId(int ticketId) {
             this.ticketId = ticketId;
             return this;

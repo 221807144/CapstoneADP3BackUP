@@ -21,8 +21,8 @@ public class Admin extends User {
     protected Status status;
 
     private String reason;
-    @OneToOne(cascade = CascadeType.ALL)
-    private User user;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private User user;
 
     public enum Status {
         PENDING,
@@ -68,7 +68,7 @@ public class Admin extends User {
                 "payments=" + payments +
                 ", status=" + status +
                 ", reason='" + reason + '\'' +
-                ", user=" + user +
+
                 ", userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

@@ -14,7 +14,9 @@ import za.ac.cput.Service.impl.PaymentService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/payments")
+@CrossOrigin(origins = "http://localhost:3000") // <-- allow React app
+
 public class PaymentController {
 
     private final PaymentService paymentService;

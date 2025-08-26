@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/vehicledisc")
+@CrossOrigin(origins = "http://localhost:3000") // <-- allow React app
 public class VehicleDiscController {
     private VehicleDiscService vehicleDiscService;
 

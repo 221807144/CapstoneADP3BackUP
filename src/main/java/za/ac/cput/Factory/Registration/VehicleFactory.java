@@ -1,7 +1,9 @@
 package za.ac.cput.Factory.Registration;
 
 import za.ac.cput.Domain.Registrations.Vehicle;
+import za.ac.cput.Domain.User.Applicant;
 import za.ac.cput.Domain.bookings.VehicleDisc;
+import za.ac.cput.Domain.payment.Payment;
 import za.ac.cput.Domain.payment.Ticket;
 import za.ac.cput.Util.Helper;
 
@@ -14,11 +16,15 @@ public class VehicleFactory {
      String vehicleModel,
      String vehicleYear,
      String vehicleColor,
+     String licensePlate,
+     String engineNumber,
      VehicleDisc vehicleDisc,
-     List<Ticket> ticket
+     List<Ticket> ticket,
+     Payment payment,
+     Applicant applicant
  ) {
     if(Helper.isNullOrEmpty(vehicleName) || Helper.isNullOrEmpty(vehicleType) || Helper.isNullOrEmpty(vehicleModel)||
-    Helper.isNullOrEmpty(vehicleYear) || Helper.isNullOrEmpty(vehicleColor) || vehicleDisc == null
+    Helper.isNullOrEmpty(vehicleYear) || Helper.isNullOrEmpty(vehicleColor) || Helper.isNullOrEmpty(licensePlate)|| vehicleDisc == null || payment == null || applicant == null
     )
         return null;
     return new Vehicle.Builder()
@@ -27,8 +33,12 @@ public class VehicleFactory {
             .setVehicleModel(vehicleModel)
             .setVehicleYear(vehicleYear)
             .setVehicleColor(vehicleColor)
+            .setLicensePlate(licensePlate)
+            .setEngineNumber(engineNumber)
             .setVehicleDisc(vehicleDisc)
             .setTicket(ticket)
+            .setPayment(payment)
+            .setApplicant(applicant)
             .build();
  }
 }

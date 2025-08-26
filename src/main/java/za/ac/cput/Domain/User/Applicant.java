@@ -1,11 +1,13 @@
 package za.ac.cput.Domain.User;
 
 import jakarta.persistence.*;
+import za.ac.cput.Domain.Registrations.Vehicle;
 import za.ac.cput.Domain.bookings.Bookings;
 import za.ac.cput.Domain.contact.Address;
 import za.ac.cput.Domain.contact.Contact;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -23,11 +25,15 @@ public class Applicant extends User {
     @JoinColumn(name = "license_id")
     private License license;
 
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vehicle>  vehicle ;
+
+
     public Applicant() {
     }
 
     private Applicant(Builder builder) {
-        this.userId = builder.UserId;
+        this.userId = builder.userId;
         this.idNumber = builder.idNumber;
         this.birthDate = builder.birthDate;
         this.address = builder.address;
@@ -38,6 +44,7 @@ public class Applicant extends User {
         this.bookings = builder.bookings;
         this.password = builder.password;
         this.role = builder.role;
+        this.vehicle = builder.vehicle;
     }
 
     public String getIdNumber() {
@@ -56,6 +63,10 @@ public class Applicant extends User {
         return license;
     }
 
+    public List<Vehicle> getVehicle() {
+        return vehicle;
+    }
+
     @Override
     public String toString() {
         return "Applicant{" +
@@ -63,7 +74,8 @@ public class Applicant extends User {
                 ", birthDate=" + birthDate +
                 ", address=" + address +
                 ", license=" + license +
-                ", UserId=" + userId +
+                ", vehicle=" + vehicle +
+                ", userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", contact=" + contact +
@@ -74,7 +86,7 @@ public class Applicant extends User {
     }
 
     public static class Builder {
-        private int UserId;
+        private int userId;
         private String idNumber;
         private LocalDate birthDate;
         private Address address;
@@ -85,9 +97,11 @@ public class Applicant extends User {
         private  String password;
         private Bookings bookings;
         private Role role;
+        private List<Vehicle> vehicle;
+
 
         public Builder setUserId(int userId) {
-            this.UserId = userId;
+            this.userId = userId;
             return this;
         }
 
@@ -126,10 +140,6 @@ public class Applicant extends User {
             return this;
         }
 
-        public Builder setUserBooks(Bookings bookings) {
-            this.bookings = bookings;
-            return this;
-        }
         public  Builder setPassword(String password) {
             this.password = password;
             return this;
@@ -141,8 +151,18 @@ public class Applicant extends User {
             return this;
         }
 
+        public Builder setBookings(Bookings bookings) {
+            this.bookings = bookings;
+            return this;
+        }
+
+        public Builder setVehicle(List<Vehicle> vehicle) {
+            this.vehicle = vehicle;
+            return this;
+        }
+
         public Builder copy(Applicant applicant) {
-            this.UserId = applicant.userId;
+            this.userId = applicant.userId;
             this.idNumber = applicant.idNumber;
             this.birthDate = applicant.birthDate;
             this.address = applicant.address;
@@ -153,6 +173,7 @@ public class Applicant extends User {
             this.bookings = applicant.getBookings();
             this.password = applicant.password;
             this.role = applicant.role;
+            this.vehicle = applicant.vehicle;
             return this;
         }
 

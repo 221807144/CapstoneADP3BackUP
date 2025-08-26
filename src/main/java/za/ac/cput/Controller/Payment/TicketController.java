@@ -38,6 +38,4 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getTickets());
     }
 
-
-
 }

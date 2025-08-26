@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import za.ac.cput.Domain.Registrations.Vehicle;
+import za.ac.cput.Domain.User.Applicant;
 import za.ac.cput.Domain.bookings.VehicleDisc;
 import za.ac.cput.Domain.payment.Payment;
 import za.ac.cput.Domain.payment.Ticket;
@@ -26,7 +27,7 @@ class VehicleControllerTest {
     private static VehicleDisc disc;
 
     private static List<Ticket> ticketList ;
-
+    private static Applicant applicant;
     private static Vehicle vehicle;
     private static Vehicle createdVehicle;
 
@@ -40,10 +41,12 @@ class VehicleControllerTest {
     private static List<Ticket> paymentTicketList(){
         List<Ticket> ticketList = new ArrayList<>();
 
-        Payment payment1 = PaymentFactory.createPayment(2000, "PayPal", "Payment for Speeding Ticket");
+        LocalDate date = LocalDate.now();
+
+        Payment payment1 = PaymentFactory.createPayment(2000.0,"Card","Thando", 4538483625767l ,date,"Ticket", (short) 464);
         Ticket ticket1 = TicketFactory.createTicket("NO_LICENSE");
 
-        Payment payment2 = PaymentFactory.createPayment(1500, "Credit Card", "Payment for Parking Ticket");
+        Payment payment2 = PaymentFactory.createPayment(2000.0,"Card","Thando", 4538483625767l ,date,"Ticket", (short) 464);
         Ticket ticket2 = TicketFactory.createTicket("NO_LICENSE", payment2);
 
         ticketList.add(ticket1);
@@ -77,8 +80,12 @@ class VehicleControllerTest {
                 "Fortuner",
                 "2023",
                 "White",
+          "CAA1234",
+          "zaa098",
                 disc,
-               null
+               null,
+               null,
+                 applicant
         );
 
     }

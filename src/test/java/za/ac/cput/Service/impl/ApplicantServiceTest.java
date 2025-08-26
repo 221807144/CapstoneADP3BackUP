@@ -46,6 +46,7 @@ class ApplicantServiceTest {
                 .setAddress(address)
                 .setRole(Applicant.Role.APPLICANT)
                 .build();
+
     }
 
     @Test

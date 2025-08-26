@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import za.ac.cput.Domain.User.Applicant;
 import za.ac.cput.Service.impl.ApplicantService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000") // ✅ allow frontend calls
@@ -46,15 +48,6 @@ public class ApplicantController {
         return ResponseEntity.ok(updated);
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-//        Applicant applicant = applicantService.read(id);
-//        if (applicant == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        applicantService.delete(id);
-//        return ResponseEntity.noContent().build();
-//    }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<Applicant>> getAll() {
@@ -62,22 +55,42 @@ public class ApplicantController {
         return ResponseEntity.ok(applicants);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody Applicant loginRequest) {
-//        Optional<Applicant> applicantOpt = applicantService.getAll().stream()
-//                .filter(a -> a.getContact().getEmail().equalsIgnoreCase(loginRequest.getContact().getEmail()))
-//                .findFirst();
-//
-//        if (applicantOpt.isPresent()) {
-//            Applicant applicant = applicantOpt.get();
-//            if (applicant.getPassword().equals(loginRequest.getPassword())) {
-//                return ResponseEntity.ok("Login successful!");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
-//            }
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Applicant not found.");
-//        }
-//    }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Applicant loginRequest) {
+        if (loginRequest.getContact() == null || loginRequest.getContact().getEmail() == null) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+        if (loginRequest.getPassword() == null) {
+            return ResponseEntity.badRequest().body("Password is required");
+        }
+
+        Optional<Applicant> applicantOpt = applicantService.getAll().stream()
+                .filter(a -> a.getContact() != null
+                        && a.getContact().getEmail().equalsIgnoreCase(loginRequest.getContact().getEmail()))
+                .findFirst();
+
+        if (applicantOpt.isPresent()) {
+            Applicant applicant = applicantOpt.get();
+            if (loginRequest.getPassword().equals(applicant.getPassword())) {
+                // Return only a message and minimal user info
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Login successful!");
+                response.put("userId", applicant.getUserId());
+                response.put("firstName", applicant.getFirstName());
+                response.put("lastName" , applicant.getLastName()) ;
+                response.put("idNumber" , applicant.getIdNumber());// optional, for frontend display
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Applicant not found.");
+        }
+    }
+
 
 }
+
+
+
+

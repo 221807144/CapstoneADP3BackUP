@@ -1,6 +1,7 @@
 package za.ac.cput.Util;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import za.ac.cput.Domain.payment.Payment;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -77,6 +78,32 @@ public class Helper {
 
     public static Boolean isAmountValid(double amount) {
         return true? !(amount == 0) && isNullOrEmpty(String.valueOf(amount)): false;
+    }
+
+    public static Payment.PaymentMethod getPaymentMethod(String paymentMethod) {
+        isNullOrEmpty(paymentMethod);
+        switch(paymentMethod) {
+            case "Cash":
+                return Payment.PaymentMethod.Cash;
+            case "Card":
+                return Payment.PaymentMethod.Card;
+            default:
+                return null;
+        }
+    }
+
+    public static Payment.PaymentType getPaymentType(String paymentType) {
+        isNullOrEmpty(paymentType);
+        switch(paymentType) {
+            case "Ticket":
+                return Payment.PaymentType.Ticket;
+            case "Disc":
+                return Payment.PaymentType.Disc;
+            case "Booking":
+                return Payment.PaymentType.Booking;
+            default:
+                return null;
+        }
     }
 
 }

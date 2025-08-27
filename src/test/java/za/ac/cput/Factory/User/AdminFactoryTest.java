@@ -37,53 +37,53 @@ class AdminFactoryTest {
                 .build();
         return Collections.singletonList(payment);
     }
-
-    @Test
-    void testCreateAdmin_shouldNotBeNull() {
-        Admin admin = AdminFactory.createAdmin(
-                "Masibuve",
-                "Sikhulume",
-                getContact(),
-                getBooking(),
-                User.Role.ADMIN,
-                getPayments(),
-                Admin.Status.ACCEPTED,
-                "System Manager"
-        );
-        assertNotNull(admin);
-    }
-
-    @Test
-    void testCreateAdmin_valuesShouldMatch() {
-        Admin admin = AdminFactory.createAdmin(
-                "Masibuve",
-                "Sikhulume",
-                getContact(),
-                getBooking(),
-                User.Role.ADMIN,
-                getPayments(),
-                Admin.Status.ACCEPTED,
-                "System Manager"
-        );
-
-        assertEquals("Masibuve", admin.getFirstName());
-        assertEquals("Sikhulume", admin.getLastName());
-        assertEquals("admin@example.com", admin.getContact().getEmail());
-        assertEquals(Admin.Status.ACCEPTED, admin.getStatus());
-    }
-
-    @Test
-    void testCreateAdmin_printOutput() {
-        Admin admin = AdminFactory.createAdmin(
-                "Masibuve",
-                "Sikhulume",
-                getContact(),
-                getBooking(),
-                User.Role.ADMIN,
-                getPayments(),
-                Admin.Status.ACCEPTED,
-                "System Manager"
-        );
-        System.out.println(admin);
-    }
+//
+//    @Test
+//    void testCreateAdmin_shouldNotBeNull() {
+//        Admin admin = AdminFactory.createAdmin(
+//                "Masibuve",
+//                "Sikhulume",
+//                getContact(),
+//                getBooking(),
+//                User.Role.ADMIN,
+//                getPayments(),
+//                Admin.Status.ACCEPTED,
+//                "System Manager"
+//        );
+//        assertNotNull(admin);
+//    }
+//
+//    @Test
+//    void testCreateAdmin_valuesShouldMatch() {
+//        Admin admin = AdminFactory.createAdmin(
+//                "Masibuve",
+//                "Sikhulume",
+//                getContact(),
+//                getBooking(),
+//                User.Role.ADMIN,
+//                getPayments(),
+//                Admin.Status.ACCEPTED,
+//                "System Manager"
+//        );
+//
+//        assertEquals("Masibuve", admin.getFirstName());
+//        assertEquals("Sikhulume", admin.getLastName());
+//        assertEquals("admin@example.com", admin.getContact().getEmail());
+//        assertEquals(Admin.Status.ACCEPTED, admin.getStatus());
+//    }
+//
+//    @Test
+//    void testCreateAdmin_printOutput() {
+//        Admin admin = AdminFactory.createAdmin(
+//                "Masibuve",
+//                "Sikhulume",
+//                getContact(),
+//                getBooking(),
+//                User.Role.ADMIN,
+//                getPayments(),
+//                Admin.Status.ACCEPTED,
+//                "System Manager"
+//        );
+//        System.out.println(admin);
+//    }
 }

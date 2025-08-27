@@ -30,7 +30,8 @@ public class ApplicantFactoryTest {
     private Bookings bookings;
     private VehicleDisc disc;
     private List<Ticket> tickets;
-    private List<Vehicle> vehicle;
+    private List<Vehicle> vehicles;
+    private Payment payment;
 
     @BeforeEach
     public void setUp() {
@@ -48,53 +49,58 @@ public class ApplicantFactoryTest {
 
         license = new License.Builder()
                 .setlicenseCode("Code 10")
-                .setIssueDate((LocalDate.of(2015, 1, 10)))
-                .setExpiryDate((LocalDate.of(2025, 1, 10)))
+                .setIssueDate(LocalDate.of(2015, 1, 10))
+                .setExpiryDate(LocalDate.of(2025, 1, 10))
                 .build();
 
         bookings = new Bookings.Builder()
                 .setBookingDate(LocalDate.now())
                 .build();
 
-        disc = VehicleDiscFactory.createVehicleDisc(LocalDate.of(2020, 8, 6), LocalDate.of(2024, 2, 6));
+        disc = VehicleDiscFactory.createVehicleDisc(
+                LocalDate.of(2020, 8, 6),
+                LocalDate.of(2024, 2, 6)
+        );
 
-        Payment payment = PaymentFactory.createPayment(2000, "PayPal", "Payment for Ticket");
-//            Ticket ticketWithPayment = TicketFactory.createTicket(3000, "Pending", payment);
-
+        payment = PaymentFactory.createPayment(2000, "PayPal", "Payment for Ticket");
         tickets = new ArrayList<>();
-//            tickets.add(ticketWithPayment);
 
-//        vehicle = VehicleFactory.createvehicle(
-//                "Toyota",
-//                "SUV",
-//                "Fortuner",
-//                "2023",
-//                "White",
-//                disc,
-//                tickets,
-//                payment
-//        );
+        // ✅ Proper Vehicle creation
+        Vehicle car = VehicleFactory.createvehicle(
+                "Toyota",
+                "SUV",
+                "Fortuner",
+                "2023",
+                "White",
+                "bwa345678",
+                "1234567899876",
+                disc,
+                tickets,
+                payment,
+                null
 
-        vehicle = new ArrayList<>();
-        vehicle.add((Vehicle) vehicle);
+        );
+
+        vehicles = new ArrayList<>();
+        vehicles.add(car);
     }
 
     @Test
     public void testCreateValidApplicant() {
         Applicant applicant = ApplicantFactory.createApplicant(
-                "Masibuve",
-                "Sikhulume",
-                "0001015009087",
+                "0001015009087",      // ✅ idNumber
+                "Masibuve",           // ✅ firstName
+                "Sikhulume",          // ✅ lastName
                 contact,
                 address,
                 license,
                 bookings,
                 User.Role.APPLICANT,
-                vehicle
-
+                vehicles,
+                "password123"         // ✅ added password
         );
 
-        System.out.println(applicant); // prints the object result
+        System.out.println(applicant);
         assertNotNull(applicant);
     }
 
@@ -106,36 +112,38 @@ public class ApplicantFactoryTest {
                 .build();
 
         Applicant applicant = ApplicantFactory.createApplicant(
+                "0001015009087",
                 "Test",
                 "User",
-                "0001015009087",
                 badContact,
                 address,
                 license,
                 bookings,
                 User.Role.APPLICANT,
-                vehicle
+                vehicles,
+                "password123"
         );
 
-        System.out.println(applicant); // prints null
+        System.out.println(applicant);
         assertNull(applicant);
     }
 
     @Test
     public void testCreateApplicantWithMissingName() {
         Applicant applicant = ApplicantFactory.createApplicant(
-                "",  // missing name
-                "Sikhulume",
                 "0001015009087",
+                "",                   // ❌ missing firstName
+                "Sikhulume",
                 contact,
                 address,
                 license,
                 bookings,
                 User.Role.APPLICANT,
-                vehicle
+                vehicles,
+                "password123"
         );
 
-        System.out.println(applicant); // prints null
+        System.out.println(applicant);
         assertNull(applicant);
     }
 }

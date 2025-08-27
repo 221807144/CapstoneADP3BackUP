@@ -13,9 +13,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ApplicantFactory {
-    public static Applicant createApplicant(String firstName, String lastName, String idNumber,
+    public static Applicant createApplicant(String idNumber,String firstName, String lastName,
                                             Contact contact, Address address, License license,
-                                            Bookings bookings, User.Role role ,  List<Vehicle> vehicle) {
+                                            Bookings bookings, User.Role role ,  List<Vehicle> vehicle ,String password) {
 
         if (Helper.isNullOrEmpty(firstName) || Helper.isNullOrEmpty(lastName) ||
                 contact == null || address == null || license == null || bookings == null ||
@@ -40,6 +40,7 @@ public class ApplicantFactory {
                 .setBookings(bookings)
                 .setRole(role)
                 .setVehicle(vehicle)
+                .setPassword(password)
                 .build();
     }
 }

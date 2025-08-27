@@ -2,27 +2,33 @@ package za.ac.cput.Domain.User;
 
 import jakarta.persistence.*;
 import za.ac.cput.Domain.bookings.Bookings;
+import za.ac.cput.Domain.contact.Address;
 import za.ac.cput.Domain.contact.Contact;
+
+import java.time.LocalDate;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int userId;
-
+    @Column(unique = true, nullable = false)
+    protected String idNumber;
+    protected LocalDate birthDate;
     protected String firstName;
     protected String lastName;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_id")
     protected Contact contact;
     protected String password;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    protected Address address;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Bookings_id")
     protected Bookings bookings;
-;
 
     @Enumerated(EnumType.STRING)
     protected Role role;
@@ -40,7 +46,23 @@ public class User {
     }
 
     public void setUserId(int userId) {
-        this.userId= userId;
+        this.userId = userId;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getFirstName() {
@@ -75,6 +97,14 @@ public class User {
         this.password = password;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public Bookings getBookings() {
         return bookings;
     }
@@ -94,11 +124,14 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "UserId=" + userId +
+                "userId=" + userId +
+                ", idNumber='" + idNumber + '\'' +
+                ", birthDate=" + birthDate +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", contact=" + contact +
                 ", password='" + password + '\'' +
+                ", address=" + address +
                 ", bookings=" + bookings +
                 ", role=" + role +
                 '}';

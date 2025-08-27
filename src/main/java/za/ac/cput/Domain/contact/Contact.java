@@ -10,6 +10,7 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int contactId;
+    @Column(unique = true, nullable = false)
     private String cellphone;
     @Column(unique = true, nullable = false)
     private String email;

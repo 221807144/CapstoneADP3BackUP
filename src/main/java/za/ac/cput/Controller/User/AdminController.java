@@ -1,6 +1,7 @@
 package za.ac.cput.Controller.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.Domain.User.Admin;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/CapstoneADP3/admins")
+@RequestMapping("/admins")
 public class AdminController {
 
     private final AdminService adminService;
@@ -77,4 +78,33 @@ public class AdminController {
         data.put("tickets", adminService.getTickets());
         return ResponseEntity.ok(data);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Admin loginRequest) {
+        if (loginRequest.getContact() == null || loginRequest.getContact().getEmail() == null) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+        if (loginRequest.getPassword() == null) {
+            return ResponseEntity.badRequest().body("Password is required");
+        }
+
+        return adminService.getAllAdmins().stream()
+                .filter(a -> a.getContact() != null &&
+                        a.getContact().getEmail().equalsIgnoreCase(loginRequest.getContact().getEmail()))
+                .findFirst()
+                .map(admin -> {
+                    if (loginRequest.getPassword().equals(admin.getPassword())) {
+                        Map<String, Object> response = new HashMap<>();
+                        response.put("message", "Login successful!");
+                        response.put("userId", admin.getUserId());
+                        response.put("firstName", admin.getFirstName());
+                        response.put("lastName", admin.getLastName());
+                        return ResponseEntity.ok(response);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
+                    }
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found."));
+    }
+
 }

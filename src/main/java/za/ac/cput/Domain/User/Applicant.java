@@ -13,21 +13,12 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("APPLICANT")
 public class Applicant extends User {
-
-    private String idNumber;
-    private LocalDate birthDate;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    private Address address;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "license_id")
     private License license;
 
     @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vehicle>  vehicle ;
-
 
     public Applicant() {
     }
@@ -47,18 +38,6 @@ public class Applicant extends User {
         this.vehicle = builder.vehicle;
     }
 
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
     public License getLicense() {
         return license;
     }
@@ -66,24 +45,24 @@ public class Applicant extends User {
     public List<Vehicle> getVehicle() {
         return vehicle;
     }
-
     @Override
     public String toString() {
         return "Applicant{" +
-                "idNumber='" + idNumber + '\'' +
-                ", birthDate=" + birthDate +
-                ", address=" + address +
-                ", license=" + license +
+                "license=" + license +
                 ", vehicle=" + vehicle +
                 ", userId=" + userId +
+                ", idNumber='" + idNumber + '\'' +
+                ", birthDate=" + birthDate +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", contact=" + contact +
                 ", password='" + password + '\'' +
+                ", address=" + address +
                 ", bookings=" + bookings +
                 ", role=" + role +
                 '}';
     }
+
 
     public static class Builder {
         private int userId;

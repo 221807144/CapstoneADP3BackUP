@@ -1,6 +1,8 @@
 package za.ac.cput.Domain.payment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import za.ac.cput.Domain.User.Admin;
 
 import java.time.LocalDate;
 
@@ -25,7 +27,10 @@ public class Payment {
     private long cardNumber;
     private LocalDate cardDate;
     private short cvs;
-
+    @ManyToOne
+    @JoinColumn(name = "admin_id")
+    @JsonBackReference
+    private Admin admin;
     public Payment() {
     }
     private Payment(Builder builder) {
@@ -39,6 +44,7 @@ public class Payment {
         this.cardNumber = builder.cardNumber;
         this.cardDate = builder.cardDate;
         this.cvs = builder.cvs;
+        this.admin = builder.admin;
     }
 
     public int getPaymentId() {
@@ -81,6 +87,10 @@ public class Payment {
         return cvs;
     }
 
+    public Admin getAdmin() {
+        return admin;
+    }
+
     @Override
     public String toString() {
         return "Payments{" +
@@ -94,6 +104,7 @@ public class Payment {
                 ", cardNumber=" + cardNumber +
                 ", cardDate=" + cardDate +
                 ", cvs=" + cvs +
+                ", admin=" + admin +
                 '}';
     }
 
@@ -108,6 +119,7 @@ public class Payment {
         private long cardNumber;
         private LocalDate cardDate;
         private short cvs;
+        private Admin admin;
 
         public Builder setPaymentType(PaymentType paymentType) {
             this.paymentType = paymentType;
@@ -154,6 +166,10 @@ public class Payment {
             this.cvs = cvs;
             return this;
         }
+        public Builder setAdmin(Admin admin) {
+            this.admin = admin;
+            return this;
+        }
 
         public Builder copy(Payment payment) {
             this.paymentId = payment.paymentId;
@@ -166,6 +182,7 @@ public class Payment {
             this.cardNumber = payment.cardNumber;
             this.cvs = payment.cvs;
             this.cardDate = payment.cardDate;
+            this.admin = payment.admin;
             return this;
         }
 

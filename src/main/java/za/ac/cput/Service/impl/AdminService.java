@@ -1,5 +1,6 @@
 package za.ac.cput.Service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.Domain.User.Admin;
 import za.ac.cput.Domain.User.Applicant;
@@ -13,7 +14,6 @@ import za.ac.cput.Repository.*;
 import za.ac.cput.Service.IAdminService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminService implements IAdminService {
@@ -27,14 +27,17 @@ public class AdminService implements IAdminService {
     private final VehicleDiscRepository vehicleDiscRepository;
     private final TicketRepository ticketRepository;
 
-    public AdminService(AdminRepository adminRepository,
-                        ApplicantRepository applicantRepository,
-                        BookingsRepository bookingsRepository,
-                        PaymentRepository paymentRepository,
-                        RegistrationRepository registrationRepository,
-                        TestAppointmentRepository testAppointmentRepository,
-                        VehicleDiscRepository vehicleDiscRepository,
-                        TicketRepository ticketRepository) {
+    @Autowired
+    public AdminService(
+            AdminRepository adminRepository,
+            ApplicantRepository applicantRepository,
+            BookingsRepository bookingsRepository,
+            PaymentRepository paymentRepository,
+            RegistrationRepository registrationRepository,
+            TestAppointmentRepository testAppointmentRepository,
+            VehicleDiscRepository vehicleDiscRepository,
+            TicketRepository ticketRepository
+    ) {
         this.adminRepository = adminRepository;
         this.applicantRepository = applicantRepository;
         this.bookingsRepository = bookingsRepository;
@@ -45,31 +48,25 @@ public class AdminService implements IAdminService {
         this.ticketRepository = ticketRepository;
     }
 
-    // Create
+    // --- Admin CRUD ---
     @Override
     public Admin create(Admin admin) {
         return adminRepository.save(admin);
     }
 
-    // Read
     @Override
     public Admin read(Integer id) {
-        Optional<Admin> opt = adminRepository.findById(id);
-        return opt.orElse(null);
+        return adminRepository.findById(id).orElse(null);
     }
 
-    // Update
     @Override
     public Admin update(Admin admin) {
-        if (adminRepository.existsById(admin.getUserId())) {
-            return adminRepository.save(admin);
-        }
-        return null;
+        if (!adminRepository.existsById(admin.getUserId())) return null;
+        return adminRepository.save(admin);
     }
 
-    // Delete
     @Override
-    public boolean delete(Integer id) {
+    public boolean deleteAdmin(Integer id) {
         if (adminRepository.existsById(id)) {
             adminRepository.deleteById(id);
             return true;
@@ -77,45 +74,110 @@ public class AdminService implements IAdminService {
         return false;
     }
 
-
-    // Other methods
     @Override
     public List<Admin> getAllAdmins() {
         return adminRepository.findAll();
     }
 
+    // --- Applicant ---
     @Override
     public List<Applicant> getAllApplicants() {
         return applicantRepository.findAll();
     }
 
+    // --- Bookings ---
     @Override
     public List<Bookings> getBookings() {
         return bookingsRepository.findAll();
     }
 
     @Override
+    public boolean deleteBooking(Long id) {
+        if (bookingsRepository.existsById(id)) {
+            bookingsRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // --- Payments ---
+    @Override
     public List<Payment> getPayments() {
         return paymentRepository.findAll();
     }
 
     @Override
+    public boolean deletePayment(Integer id) {
+        if (paymentRepository.existsById(id)) {
+            paymentRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // --- Registrations ---
+    @Override
     public List<Registration> getRegistration() {
         return registrationRepository.findAll();
     }
 
+    // --- Test Appointments ---
     @Override
     public List<TestAppointment> getTestAppointments() {
         return testAppointmentRepository.findAll();
     }
 
     @Override
+    public boolean deleteTestAppointment(Long id) {
+        if (testAppointmentRepository.existsById(id)) {
+            testAppointmentRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // --- Vehicle Discs ---
+    @Override
     public List<VehicleDisc> getVehicleDiscs() {
         return vehicleDiscRepository.findAll();
     }
 
     @Override
+    public boolean deleteVehicleDisc(Long id) {
+        if (vehicleDiscRepository.existsById(id)) {
+            vehicleDiscRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // --- Tickets ---
+    @Override
     public List<Ticket> getTickets() {
         return ticketRepository.findAll();
     }
+
+    @Override
+    public boolean deleteTicket(Integer id) {
+        if (ticketRepository.existsById(id)) {
+            ticketRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+    public Applicant updateApplicantStatus(Integer id, String statusStr, String reason) {
+        Applicant applicant = applicantRepository.findById(id).orElse(null);
+        if (applicant == null) return null;
+
+        try {
+            Applicant.Status status = Applicant.Status.valueOf(statusStr.toUpperCase());
+            applicant.setStatus(status);
+            applicant.setReason(reason);
+            return applicantRepository.save(applicant);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid status value. Use PENDING, ACCEPTED, or REJECTED.");
+        }
+    }
+
+
 }

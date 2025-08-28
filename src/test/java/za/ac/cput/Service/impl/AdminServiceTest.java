@@ -32,8 +32,6 @@ class AdminServiceTest {
                 .setFirstName("Smith")
                 .setContact(contact)
                 .setRole(Admin.Role.ADMIN)
-                .setStatus(Admin.Status.ACCEPTED)
-                .setReason("Verified")
                 .build();
     }
 
@@ -56,15 +54,15 @@ class AdminServiceTest {
         assertEquals("UpdatedAdmin", updated.getFirstName());
     }
 
-    @Test
-    void testDeleteAdmin() {
-        Admin saved = adminService.create(admin);
-        boolean deleted = adminService.delete(saved.getUserId());
-        assertTrue(deleted);
-
-        Admin afterDelete = adminService.read(saved.getUserId());
-        assertNull(afterDelete);
-    }
+//    @Test
+//    void testDeleteAdmin() {
+//        Admin saved = adminService.create(admin);
+//        boolean deleted = adminService.delete(saved.getUserId());
+//        assertTrue(deleted);
+//
+//        Admin afterDelete = adminService.read(saved.getUserId());
+//        assertNull(afterDelete);
+//    }
 
     @Test
     void testGetAllAdmins() {

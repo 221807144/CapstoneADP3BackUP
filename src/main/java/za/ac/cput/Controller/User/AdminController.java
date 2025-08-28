@@ -6,17 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.Domain.User.Admin;
 import za.ac.cput.Domain.User.Applicant;
-import za.ac.cput.Domain.bookings.Bookings;
-import za.ac.cput.Domain.bookings.TestAppointment;
-import za.ac.cput.Domain.bookings.VehicleDisc;
-import za.ac.cput.Domain.payment.Payment;
-import za.ac.cput.Domain.payment.Ticket;
-import za.ac.cput.Domain.Registrations.Registration;
-import za.ac.cput.Service.IAdminService;
 import za.ac.cput.Service.impl.AdminService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -55,16 +47,15 @@ public class AdminController {
         return ResponseEntity.ok(updated);
     }
 
-
+    // Delete Admin
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        boolean deleted = adminService.delete(id);
-        if (!deleted)
+        if (!adminService.deleteAdmin(id))
             return ResponseEntity.notFound().build();
         return ResponseEntity.noContent().build();
     }
 
-
+    // Get all data for dashboard
     @GetMapping("/all-data")
     public ResponseEntity<Map<String, Object>> getAllData() {
         Map<String, Object> data = new HashMap<>();
@@ -79,6 +70,7 @@ public class AdminController {
         return ResponseEntity.ok(data);
     }
 
+    // Admin login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Admin loginRequest) {
         if (loginRequest.getContact() == null || loginRequest.getContact().getEmail() == null) {
@@ -106,5 +98,21 @@ public class AdminController {
                 })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found."));
     }
+    @PutMapping("/update-status/{id}")
+    public ResponseEntity<?> updateApplicantStatus(@PathVariable Integer id, @RequestBody Map<String, String> payload) {
+        String statusStr = payload.get("status");
+        String reason = payload.get("reason");
+
+        if (statusStr == null) return ResponseEntity.badRequest().body("Status is required");
+
+        try {
+            Applicant updated = adminService.updateApplicantStatus(id, statusStr, reason);
+            if (updated == null) return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 }

@@ -1,6 +1,8 @@
 package za.ac.cput.Domain.contact;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import za.ac.cput.Domain.User.User;
 
 /*Masibuve Sikhulume
 221807144
@@ -14,6 +16,9 @@ public class Contact {
     private String cellphone;
     @Column(unique = true, nullable = false)
     private String email;
+    @OneToOne(mappedBy = "contact")
+    @JsonBackReference
+    private User user;
 
     public Contact() {
     }
@@ -22,6 +27,7 @@ public class Contact {
         this.contactId = builder.contactId;
         this.cellphone = builder.cellphone;
         this.email = builder.email;
+        this.user = builder.user;
     }
 
     public int getContactId() {
@@ -35,6 +41,9 @@ public class Contact {
     public String getEmail() {
         return email;
     }
+    public User getUser() {
+        return user;
+    }
 
     @Override
     public String toString() {
@@ -42,6 +51,7 @@ public class Contact {
                 "contactId=" + contactId +
                 ", cellphone='" + cellphone + '\'' +
                 ", email='" + email + '\'' +
+                ", user=" + user +
                 '}';
     }
 
@@ -49,6 +59,7 @@ public class Contact {
         private int contactId;
         private String cellphone;
         private String email;
+        private User user;
 
         public Builder setContactId(int contactId) {
             this.contactId = contactId;
@@ -62,6 +73,11 @@ public class Contact {
 
         public Builder setEmail(String email) {
             this.email = email;
+            return this;
+
+        }
+        public Builder setUser(User user) {
+            this.user = user;
             return this;
         }
 

@@ -1,5 +1,6 @@
 package za.ac.cput.Domain.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.Domain.bookings.Bookings;
 import za.ac.cput.Domain.contact.Address;
@@ -19,15 +20,21 @@ public class User {
     protected LocalDate birthDate;
     protected String firstName;
     protected String lastName;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "contact_id")
+    @JsonManagedReference
     protected Contact contact;
+
     protected String password;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
+    @JsonManagedReference
     protected Address address;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Bookings_id")
+
     protected Bookings bookings;
 
     @Enumerated(EnumType.STRING)

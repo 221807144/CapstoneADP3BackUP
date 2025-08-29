@@ -83,7 +83,7 @@ class LicenseServiceTest {
     @Test
     void testGetAllLicenses() {
         // First verify initial state is empty
-        assertEquals(0, licenseService.getall().size());
+        assertEquals(0, licenseService.getAll().size());
 
         licenseService.create(license);
 
@@ -95,7 +95,7 @@ class LicenseServiceTest {
                 .build();
         licenseService.create(secondLicense);
 
-        List<License> all = licenseService.getall();
+        List<License> all = licenseService.getAll();
         assertEquals(2, all.size());
         assertTrue(all.stream().anyMatch(l -> l.getLicenseCode().equals("AC12345")));
         assertTrue(all.stream().anyMatch(l -> l.getLicenseCode().equals("AC67890")));

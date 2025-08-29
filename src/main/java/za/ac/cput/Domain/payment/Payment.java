@@ -21,10 +21,10 @@ public class Payment {
     private String paymentDetails;
     private double paymentAmount;
     private LocalDate paymentDate;
-    private String cardName;
+    private String cardholderName;
     private long cardNumber;
-    private LocalDate cardDate;
-    private short cvs;
+    private LocalDate expiryDate;
+    private short cvv;
 
     public Payment() {
     }
@@ -35,10 +35,10 @@ public class Payment {
         this.paymentDetails = builder.paymentDetails;
         this.paymentAmount = builder.paymentAmount;
         this.paymentDate = builder.paymentDate;
-        this.cardName = builder.cardName;
+        this.cardholderName = builder.cardholderName;
         this.cardNumber = builder.cardNumber;
-        this.cardDate = builder.cardDate;
-        this.cvs = builder.cvs;
+        this.expiryDate = builder.expiryDate;
+        this.cvv = builder.cvv;
     }
 
     public int getPaymentId() {
@@ -65,20 +65,20 @@ public class Payment {
         return paymentDate;
     }
 
-    public LocalDate getCardDate() {
-        return cardDate;
+    public LocalDate getExpiryDate() {
+        return expiryDate;
     }
 
-    public String getCardName() {
-        return cardName;
+    public String getCardholderName() {
+        return cardholderName;
     }
 
     public long getCardNumber() {
         return cardNumber;
     }
 
-    public short getCvs() {
-        return cvs;
+    public short getCvv() {
+        return cvv;
     }
 
     @Override
@@ -90,10 +90,10 @@ public class Payment {
                 ", paymentDetails='" + paymentDetails + '\'' +
                 ", paymentAmount=" + paymentAmount +
                 ", paymentDate=" + paymentDate +
-                ", cardName='" + cardName + '\'' +
+                ", cardName='" + cardholderName + '\'' +
                 ", cardNumber=" + cardNumber +
-                ", cardDate=" + cardDate +
-                ", cvs=" + cvs +
+                ", cardDate=" + expiryDate +
+                ", cvs=" + cvv +
                 '}';
     }
 
@@ -104,10 +104,10 @@ public class Payment {
         private String paymentDetails;
         private double paymentAmount;
         private LocalDate paymentDate;
-        private String cardName;
+        private String cardholderName;
         private long cardNumber;
-        private LocalDate cardDate;
-        private short cvs;
+        private LocalDate expiryDate;
+        private short cvv;
 
         public Builder setPaymentType(PaymentType paymentType) {
             this.paymentType = paymentType;
@@ -135,13 +135,13 @@ public class Payment {
             return this;
         }
 
-        public Builder setCardDate(LocalDate cardDate) {
-            this.cardDate = cardDate;
+        public Builder setExpiryDate(LocalDate expiryDate) {
+            this.expiryDate = expiryDate;
             return this;
         }
 
-        public Builder setCardName(String cardName) {
-            this.cardName = cardName;
+        public Builder setCardholderName(String cardholderName) {
+            this.cardholderName = cardholderName;
             return this;
         }
 
@@ -150,8 +150,8 @@ public class Payment {
             return this;
         }
 
-        public Builder setCvs(short cvs) {
-            this.cvs = cvs;
+        public Builder setCvv(short cvv) {
+            this.cvv = cvv;
             return this;
         }
 
@@ -162,10 +162,10 @@ public class Payment {
             this.paymentDetails = payment.paymentDetails;
             this.paymentAmount = payment.paymentAmount;
             this.paymentDate = payment.paymentDate;
-            this.cardName = payment.cardName;
+            this.cardholderName = payment.cardholderName;
             this.cardNumber = payment.cardNumber;
-            this.cvs = payment.cvs;
-            this.cardDate = payment.cardDate;
+            this.cvv = payment.cvv;
+            this.expiryDate = payment.expiryDate;
             return this;
         }
 

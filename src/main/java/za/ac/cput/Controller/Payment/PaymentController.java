@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/payments")
 @CrossOrigin(origins = "http://localhost:3000") // <-- allow React app
-
 public class PaymentController {
 
     private final PaymentService paymentService;

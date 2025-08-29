@@ -21,10 +21,10 @@ public class PaymentFactory {
                 .setPaymentDate(paymentDate)
                 .setPaymentMethod(Helper.getPaymentMethod(paymentMethod))
                 .setPaymentType(Helper.getPaymentType(paymentType))
-                .setCardName(cardName)
+                .setCardholderName(cardName)
                 .setCardNumber(cardNumber)
-                .setCardDate(expirationDate)
-                .setCvs(cvs)
+                .setExpiryDate(expirationDate)
+                .setCvv(cvs)
                 .build();
     }
 

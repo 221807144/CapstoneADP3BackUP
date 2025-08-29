@@ -40,6 +40,7 @@ public class ApplicantFactory {
                 .setBookings(bookings)
                 .setRole(role)
                 .setVehicle(vehicle)
+
                 .setPassword(password)
                 .build();
     }

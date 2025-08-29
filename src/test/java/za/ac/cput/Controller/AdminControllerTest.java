@@ -39,8 +39,6 @@ class AdminControllerTest {
                 .setLastName("Smith")
                 .setContact(contact)
                 .setRole(Admin.Role.ADMIN)
-                .setStatus(Admin.Status.ACCEPTED)
-                .setReason("Verified")
                 .build();
 
         HttpHeaders headers = new HttpHeaders();

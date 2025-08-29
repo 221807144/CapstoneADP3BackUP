@@ -1,5 +1,6 @@
 package za.ac.cput.Domain.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.Domain.bookings.Bookings;
 import za.ac.cput.Domain.contact.Address;
@@ -15,18 +16,10 @@ import java.util.List;
 public class Admin extends User {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "admin_id") // this creates a foreign key in Payment table
-    private List<Payment> payments = new ArrayList<>();
+    @JoinColumn(name = "admin_id")
+    @JsonManagedReference
+    private List<Payment> payments;
 
-    @Enumerated(EnumType.STRING)
-    protected Status status;
-    private String reason;
-
-    public enum Status {
-        PENDING,
-        ACCEPTED,
-        REJECTED
-    }
 
     public Admin() {
     }
@@ -43,8 +36,7 @@ public class Admin extends User {
         this.bookings = builder.bookings;
         this.role = builder.role;
         this.payments = builder.payments;
-        this.status = builder.status;
-        this.reason = builder.reason;
+
 
 
 
@@ -58,20 +50,11 @@ public class Admin extends User {
         return payments;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public String getReason() {
-        return reason;
-    }
 
     @Override
     public String toString() {
         return "Admin{" +
                 "payments=" + payments +
-                ", status=" + status +
-                ", reason='" + reason + '\'' +
                 ", userId=" + userId +
                 ", idNumber='" + idNumber + '\'' +
                 ", birthDate=" + birthDate +
@@ -97,8 +80,7 @@ public class Admin extends User {
         private Bookings bookings;
         private Role role;
         private List<Payment> payments;
-        private Status status;
-        private String reason;
+
 
         public Builder setUserId(int userId) {
             this.userId = userId;
@@ -155,15 +137,6 @@ public class Admin extends User {
             return this;
         }
 
-        public Builder setStatus(Status status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder setReason(String reason) {
-            this.reason = reason;
-            return this;
-        }
 
         public Builder copy(Admin admin) {
          this.userId = admin.userId;
@@ -177,8 +150,7 @@ public class Admin extends User {
          this.bookings = admin.bookings;
          this.role = admin.role;
          this.payments = admin.payments;
-         this.status = admin.status;
-         this.reason = admin.reason;
+
          return this;
         }
 

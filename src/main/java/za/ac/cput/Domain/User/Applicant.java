@@ -1,5 +1,6 @@
 package za.ac.cput.Domain.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.Domain.Registrations.Vehicle;
 import za.ac.cput.Domain.bookings.Bookings;
@@ -9,19 +10,30 @@ import za.ac.cput.Domain.contact.Contact;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @Entity
 @DiscriminatorValue("APPLICANT")
 public class Applicant extends User {
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "license_id")
     private License license;
 
     @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Vehicle>  vehicle ;
+    @JsonManagedReference
+    private List<Vehicle> vehicle;
 
-    public Applicant() {
+    @Enumerated(EnumType.STRING)
+    protected Status status;
+
+    private String reason;
+
+    public enum Status {
+        PENDING,
+        ACCEPTED,
+        REJECTED
     }
+
+    public Applicant() { }
 
     private Applicant(Builder builder) {
         this.userId = builder.userId;
@@ -36,20 +48,27 @@ public class Applicant extends User {
         this.password = builder.password;
         this.role = builder.role;
         this.vehicle = builder.vehicle;
+        this.status = builder.status;
+        this.reason = builder.reason;
     }
 
-    public License getLicense() {
-        return license;
-    }
+    // --- Getters ---
+    public License getLicense() { return license; }
+    public List<Vehicle> getVehicle() { return vehicle; }
+    public Status getStatus() { return status; }
+    public String getReason() { return reason; }
 
-    public List<Vehicle> getVehicle() {
-        return vehicle;
-    }
+    // --- Setters (needed for AdminService updates) ---
+    public void setStatus(Status status) { this.status = status; }
+    public void setReason(String reason) { this.reason = reason; }
+
     @Override
     public String toString() {
         return "Applicant{" +
                 "license=" + license +
                 ", vehicle=" + vehicle +
+                ", status=" + status +
+                ", reason='" + reason + '\'' +
                 ", userId=" + userId +
                 ", idNumber='" + idNumber + '\'' +
                 ", birthDate=" + birthDate +
@@ -63,7 +82,7 @@ public class Applicant extends User {
                 '}';
     }
 
-
+    // --- Builder ---
     public static class Builder {
         private int userId;
         private String idNumber;
@@ -73,72 +92,27 @@ public class Applicant extends User {
         private String firstName;
         private String lastName;
         private Contact contact;
-        private  String password;
+        private String password;
         private Bookings bookings;
         private Role role;
         private List<Vehicle> vehicle;
+        private Status status;
+        private String reason;
 
-
-        public Builder setUserId(int userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder setIdNumber(String idNumber) {
-            this.idNumber = idNumber;
-            return this;
-        }
-
-        public Builder setBirthDate(LocalDate birthDate) {
-            this.birthDate = birthDate;
-            return this;
-        }
-
-        public Builder setAddress(Address address) {
-            this.address = address;
-            return this;
-        }
-
-        public Builder setLicense(License license) {
-            this.license = license;
-            return this;
-        }
-
-        public Builder setFirstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public Builder setLastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public Builder setContact(Contact contact) {
-            this.contact = contact;
-            return this;
-        }
-
-        public  Builder setPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-
-        public Builder setRole(Role role) {
-            this.role = role;
-            return this;
-        }
-
-        public Builder setBookings(Bookings bookings) {
-            this.bookings = bookings;
-            return this;
-        }
-
-        public Builder setVehicle(List<Vehicle> vehicle) {
-            this.vehicle = vehicle;
-            return this;
-        }
+        public Builder setUserId(int userId) { this.userId = userId; return this; }
+        public Builder setIdNumber(String idNumber) { this.idNumber = idNumber; return this; }
+        public Builder setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; return this; }
+        public Builder setAddress(Address address) { this.address = address; return this; }
+        public Builder setLicense(License license) { this.license = license; return this; }
+        public Builder setFirstName(String firstName) { this.firstName = firstName; return this; }
+        public Builder setLastName(String lastName) { this.lastName = lastName; return this; }
+        public Builder setContact(Contact contact) { this.contact = contact; return this; }
+        public Builder setPassword(String password) { this.password = password; return this; }
+        public Builder setBookings(Bookings bookings) { this.bookings = bookings; return this; }
+        public Builder setRole(Role role) { this.role = role; return this; }
+        public Builder setVehicle(List<Vehicle> vehicle) { this.vehicle = vehicle; return this; }
+        public Builder setStatus(Status status) { this.status = status; return this; }
+        public Builder setReason(String reason) { this.reason = reason; return this; }
 
         public Builder copy(Applicant applicant) {
             this.userId = applicant.userId;
@@ -153,11 +127,11 @@ public class Applicant extends User {
             this.password = applicant.password;
             this.role = applicant.role;
             this.vehicle = applicant.vehicle;
+            this.status = applicant.status;
+            this.reason = applicant.reason;
             return this;
         }
 
-        public Applicant build() {
-            return new Applicant(this);
-        }
+        public Applicant build() { return new Applicant(this); }
     }
 }

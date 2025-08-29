@@ -2,10 +2,10 @@ package za.ac.cput.Domain.contact;
 /*Masibuve Sikhulume
 221807144
  */
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import za.ac.cput.Domain.User.User;
+
 @Entity
 public class Address {
     @Id
@@ -15,7 +15,9 @@ public class Address {
     private String city;
     private String province;
     private String country;
-
+    @OneToOne(mappedBy = "address")
+    @JsonBackReference
+    private User user;
     public Address() {
     }
     private Address(Builder builder) {
@@ -24,6 +26,7 @@ public class Address {
         this.city = builder.city;
         this.province = builder.province;
         this.country = builder.country;
+        this.user=builder.user;
     }
     public int getAddressId() {
         return addressId;
@@ -40,6 +43,9 @@ public class Address {
     public String getCountry() {
         return country;
     }
+    public User getUser() {
+        return user;
+    }
     @Override
 
     public String toString() {
@@ -49,6 +55,7 @@ public class Address {
                 ", city='" + city + '\'' +
                 ", province='" + province + '\'' +
                 ", country='" + country + '\'' +
+                ", user=" + user +
                 '}';
     }
     public static class Builder{
@@ -57,6 +64,7 @@ public class Address {
         private String city;
         private String province;
         private String country;
+        private User user;
 
         public Builder setAddressId(int addressId) {
             this.addressId = addressId;
@@ -76,6 +84,10 @@ public class Address {
         }
         public Builder setCountry(String country) {
             this.country = country;
+            return this;
+        }
+        public Builder setUser(User user) {
+            this.user = user;
             return this;
         }
         public Builder copy(Address address) {

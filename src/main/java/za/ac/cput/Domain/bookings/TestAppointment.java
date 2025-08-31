@@ -1,7 +1,11 @@
 package za.ac.cput.Domain.bookings;
 
 import jakarta.persistence.*;
+import za.ac.cput.Domain.User.Applicant;
+import za.ac.cput.Domain.payment.Payment;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +17,7 @@ public class TestAppointment {
     private String testAddress;
     private String testVenue;
     private LocalDate testDate;
+    private LocalTime testTime;
     private Boolean testResult;
     private String licenseCode;
 
@@ -20,6 +25,14 @@ public class TestAppointment {
     private TestType testype;
 
     private double testAmount;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
+    @ManyToOne
+    @JoinColumn(name = "applicant_id")
+    private Applicant applicant;
 
     public TestAppointment() {
     }
@@ -33,6 +46,9 @@ public class TestAppointment {
         this.licenseCode = builder.licenseCode;
         this.testAmount = builder.testAmount;
         this.testype = builder.testype;
+        this.testTime = builder.testTime;
+        this.payment = builder.payment;
+        this.applicant = builder.applicant;
     }
 
     public Long getTestAppointmentId() {
@@ -51,8 +67,13 @@ public class TestAppointment {
         return testDate;
     }
 
-    public boolean getTestResult() {
-        return testResult;
+    public LocalTime getTestTime() {
+        return testTime != null ? testTime : LocalTime.of(9, 0);
+    }
+
+
+    public Boolean getTestResult() {
+        return testResult != null ? testResult : false;
     }
 
     public String getLicenseCode() {
@@ -66,38 +87,39 @@ public class TestAppointment {
     public double getTestAmount() {
         return testAmount;
     }
+    public Payment getPayment() {
+        return payment;
+    }
+    public Applicant getApplicant() {
+        return applicant;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TestAppointment)) return false;
-        TestAppointment test = (TestAppointment) o;
-        return testResult == test.testResult &&
-                Double.compare(test.testAmount, testAmount) == 0 &&
-                Objects.equals(testAppointmentId, test.testAppointmentId) &&
-                Objects.equals(testAddress, test.testAddress) &&
-                Objects.equals(testVenue, test.testVenue) &&
-                Objects.equals(testDate, test.testDate) &&
-                Objects.equals(licenseCode, test.licenseCode) &&
-                testype == test.testype;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestAppointment that = (TestAppointment) o;
+        return Double.compare(testAmount, that.testAmount) == 0 && Objects.equals(testAppointmentId, that.testAppointmentId) && Objects.equals(testAddress, that.testAddress) && Objects.equals(testVenue, that.testVenue) && Objects.equals(testDate, that.testDate) && Objects.equals(testTime, that.testTime) && Objects.equals(testResult, that.testResult) && Objects.equals(licenseCode, that.licenseCode) && testype == that.testype && Objects.equals(payment, that.payment) && Objects.equals(applicant, that.applicant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(testAppointmentId, testAddress, testVenue, testDate, testResult, licenseCode, testype, testAmount);
+        return Objects.hash(testAppointmentId, testAddress, testVenue, testDate, testTime, testResult, licenseCode, testype, testAmount, payment, applicant);
     }
 
     @Override
     public String toString() {
         return "TestAppointment{" +
-                "testAppointmentId=" + testAppointmentId +
+                "applicant=" + applicant +
+                ", testAppointmentId=" + testAppointmentId +
                 ", testAddress='" + testAddress + '\'' +
                 ", testVenue='" + testVenue + '\'' +
                 ", testDate=" + testDate +
+                ", testTime=" + testTime +
                 ", testResult=" + testResult +
                 ", licenseCode='" + licenseCode + '\'' +
                 ", testype=" + testype +
                 ", testAmount=" + testAmount +
+                ", payment=" + payment +
                 '}';
     }
 
@@ -106,10 +128,13 @@ public class TestAppointment {
         private String testAddress;
         private String testVenue;
         private LocalDate testDate;
-        private boolean testResult;
+        private Boolean testResult;
         private String licenseCode;
         private TestType testype;
         private double testAmount;
+        private LocalTime testTime;
+        private Payment payment;
+        private Applicant applicant;
 
         public Builder setTestAppointmentId(Long testAppointmentId) {
             this.testAppointmentId = testAppointmentId;
@@ -131,7 +156,7 @@ public class TestAppointment {
             return this;
         }
 
-        public Builder setTestResult(boolean testResult) {
+        public Builder setTestResult(Boolean testResult) {
             this.testResult = testResult;
             return this;
         }
@@ -150,6 +175,18 @@ public class TestAppointment {
             this.testAmount = testAmount;
             return this;
         }
+        public Builder setTestTime(LocalTime testTime) {
+            this.testTime = testTime;
+            return this;
+        }
+        public Builder setPayment(Payment payment) {
+            this.payment = payment;
+            return this;
+        }
+        public Builder setApplicant(Applicant applicant) {
+            this.applicant = applicant;
+            return this;
+        }
 
         public Builder copy(TestAppointment test) {
             this.testAppointmentId = test.testAppointmentId;
@@ -160,6 +197,9 @@ public class TestAppointment {
             this.licenseCode = test.licenseCode;
             this.testype = test.testype;
             this.testAmount = test.testAmount;
+            this.testTime = test.testTime;
+            this.payment = test.payment;
+            this.applicant = test.applicant;
             return this;
         }
 

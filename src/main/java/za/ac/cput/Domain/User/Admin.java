@@ -1,6 +1,5 @@
 package za.ac.cput.Domain.User;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.Domain.bookings.Bookings;
 import za.ac.cput.Domain.contact.Address;
@@ -17,9 +16,8 @@ public class Admin extends User {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "admin_id")
-    @JsonManagedReference
-    private List<Payment> payments;
-
+    // REMOVE @JsonManagedReference - this is causing the error
+    private List<Payment> payments = new ArrayList<>();
 
     public Admin() {
     }
@@ -36,20 +34,11 @@ public class Admin extends User {
         this.bookings = builder.bookings;
         this.role = builder.role;
         this.payments = builder.payments;
-
-
-
-
-//        // Set admin on each payment for bi-directional consistency
-//        for (Payment p : this.payments) {
-//            p.setAdmin(this);
-//        }
     }
 
     public List<Payment> getPayments() {
         return payments;
     }
-
 
     @Override
     public String toString() {
@@ -76,11 +65,10 @@ public class Admin extends User {
         private String firstName;
         private String lastName;
         private Contact contact;
-        private  String password;
+        private String password;
         private Bookings bookings;
         private Role role;
-        private List<Payment> payments;
-
+        private List<Payment> payments = new ArrayList<>();
 
         public Builder setUserId(int userId) {
             this.userId = userId;
@@ -137,21 +125,19 @@ public class Admin extends User {
             return this;
         }
 
-
         public Builder copy(Admin admin) {
-         this.userId = admin.userId;
-         this.idNumber = admin.idNumber;
-         this.birthDate = admin.birthDate;
-         this.address = admin.address;
-         this.firstName = admin.firstName;
-         this.lastName = admin.lastName;
-         this.contact = admin.contact;
-         this.password = admin.password;
-         this.bookings = admin.bookings;
-         this.role = admin.role;
-         this.payments = admin.payments;
-
-         return this;
+            this.userId = admin.userId;
+            this.idNumber = admin.idNumber;
+            this.birthDate = admin.birthDate;
+            this.address = admin.address;
+            this.firstName = admin.firstName;
+            this.lastName = admin.lastName;
+            this.contact = admin.contact;
+            this.password = admin.password;
+            this.bookings = admin.bookings;
+            this.role = admin.role;
+            this.payments = admin.payments;
+            return this;
         }
 
         public Admin build() {

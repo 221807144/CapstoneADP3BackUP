@@ -1,6 +1,7 @@
 package za.ac.cput.Service.impl;
 
 import org.springframework.stereotype.Service;
+import za.ac.cput.Domain.User.Applicant;
 import za.ac.cput.Domain.bookings.TestAppointment;
 import za.ac.cput.Repository.TestAppointmentRepository;
 import za.ac.cput.Service.ITestAppointmentService;
@@ -18,7 +19,7 @@ public class TestAppointmentService implements ITestAppointmentService {
     }
 
     @Override
-    public TestAppointment create(TestAppointment testAppointment) {
+    public TestAppointment create(TestAppointment testAppointment) { //updated
         return testAppointmentRepository.save(testAppointment);
     }
 
@@ -44,7 +45,12 @@ public class TestAppointmentService implements ITestAppointmentService {
 
     @Override
     public List<TestAppointment> getAll() {
-        return List.of();
+        return testAppointmentRepository.findAll();
     }
+    @Override
+    public List<TestAppointment> getByApplicantId(Long applicantId) {
+        return testAppointmentRepository.findByApplicantUserId(applicantId);
+    }
+
 
 }

@@ -17,22 +17,23 @@ public interface IAdminService extends IService<Admin, Integer> {
 
     List<Payment> getPayments();
 
-    List<Bookings> getBookings(); // Bookings uses Long ID
+    List<Bookings> getBookings();
 
     List<Applicant> getAllApplicants();
 
     List<Registration> getRegistration();
 
-    List<TestAppointment> getTestAppointments(); // TestAppointment uses Long ID
+    List<TestAppointment> getTestAppointments();
 
-    List<VehicleDisc> getVehicleDiscs(); // VehicleDisc uses Long ID
+    List<VehicleDisc> getVehicleDiscs();
 
     List<Ticket> getTickets();
 
-    boolean deleteAdmin(Integer id);           // Admin ID = Integer
-    boolean deleteBooking(Long id);            // Bookings ID = Long
-    boolean deleteTestAppointment(Long id);    // TestAppointment ID = Long
-    boolean deleteVehicleDisc(Long id);        // VehicleDisc ID = Long
-    boolean deletePayment(Integer id);         // Payment ID = Integer
-    boolean deleteTicket(Integer id);          // Ticket ID = Integer
+    boolean deleteAdmin(Integer id);
+    boolean deleteApplicant(Integer id);
+    boolean deleteBooking(Long id);
+    boolean deleteTestAppointment(Long id);
+    boolean deleteVehicleDisc(Long id);
+    boolean deletePayment(Integer id);
+    boolean deleteTicket(Integer id);
 }

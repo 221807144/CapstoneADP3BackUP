@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.Domain.User.Admin;
 import za.ac.cput.Domain.User.Applicant;
+import za.ac.cput.Domain.bookings.TestAppointment;
 import za.ac.cput.Service.impl.AdminService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -98,6 +100,7 @@ public class AdminController {
                 })
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found."));
     }
+
     @PutMapping("/update-status/{id}")
     public ResponseEntity<?> updateApplicantStatus(@PathVariable Integer id, @RequestBody Map<String, String> payload) {
         String statusStr = payload.get("status");
@@ -113,6 +116,58 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @GetMapping("/test-appointments")
+    public ResponseEntity<List<TestAppointment>> getAllTestAppointments() {
+        List<TestAppointment> appointments = adminService.getTestAppointments();
+        return ResponseEntity.ok(appointments);
+    }
 
 
+
+    @DeleteMapping("/applicants/delete/{id}")
+    public ResponseEntity<Void> deleteApplicant(@PathVariable Integer id) {
+        if (!adminService.deleteApplicant(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @DeleteMapping("/bookings/delete/{id}")
+    public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
+        if (!adminService.deleteBooking(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    // Delete Payment
+    @DeleteMapping("/payments/delete/{id}")
+    public ResponseEntity<Void> deletePayment(@PathVariable Integer id) {
+        if (!adminService.deletePayment(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    // Delete Test Appointment
+    @DeleteMapping("/test-appointments/delete/{id}")
+    public ResponseEntity<Void> deleteTestAppointment(@PathVariable Long id) {
+        if (!adminService.deleteTestAppointment(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    // Delete Vehicle Disc
+    @DeleteMapping("/vehicle-discs/delete/{id}")
+    public ResponseEntity<Void> deleteVehicleDisc(@PathVariable Long id) {
+        if (!adminService.deleteVehicleDisc(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    // Delete Ticket
+    @DeleteMapping("/tickets/delete/{id}")
+    public ResponseEntity<Void> deleteTicket(@PathVariable Integer id) {
+        if (!adminService.deleteTicket(id))
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
 }

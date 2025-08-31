@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.Domain.Registrations.Vehicle;
 import za.ac.cput.Domain.bookings.Bookings;
+import za.ac.cput.Domain.bookings.TestAppointment;
 import za.ac.cput.Domain.contact.Address;
 import za.ac.cput.Domain.contact.Contact;
 
@@ -21,7 +22,8 @@ public class Applicant extends User {
     @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JsonManagedReference
     private List<Vehicle> vehicle;
-
+    @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TestAppointment> testAppointment;
     @Enumerated(EnumType.STRING)
     protected Status status;
 //    @JsonManagedReference
@@ -50,6 +52,7 @@ public class Applicant extends User {
         this.role = builder.role;
         this.vehicle = builder.vehicle;
         this.status = builder.status;
+        this.testAppointment = builder.testAppointment;
         this.reason = builder.reason;
     }
 
@@ -58,6 +61,10 @@ public class Applicant extends User {
     public List<Vehicle> getVehicle() { return vehicle; }
     public Status getStatus() { return status; }
     public String getReason() { return reason; }
+
+    public List<TestAppointment> getTestAppointment() {
+        return testAppointment;
+    }
 
     // --- Setters (needed for AdminService updates) ---
     public void setStatus(Status status) { this.status = status; }
@@ -68,6 +75,7 @@ public class Applicant extends User {
         return "Applicant{" +
                 "license=" + license +
                 ", vehicle=" + vehicle +
+                ", testAppointment=" + testAppointment +
                 ", status=" + status +
                 ", reason='" + reason + '\'' +
                 ", userId=" + userId +
@@ -98,6 +106,7 @@ public class Applicant extends User {
         private Role role;
         private List<Vehicle> vehicle;
         private Status status;
+        private List<TestAppointment> testAppointment;
         private String reason;
 
         public Builder setUserId(int userId) { this.userId = userId; return this; }
@@ -113,6 +122,7 @@ public class Applicant extends User {
         public Builder setRole(Role role) { this.role = role; return this; }
         public Builder setVehicle(List<Vehicle> vehicle) { this.vehicle = vehicle; return this; }
         public Builder setStatus(Status status) { this.status = status; return this; }
+        public Builder setTestAppointment(List<TestAppointment> testAppointment) { this.testAppointment = testAppointment; return this; }
         public Builder setReason(String reason) { this.reason = reason; return this; }
 
         public Builder copy(Applicant applicant) {
@@ -129,6 +139,7 @@ public class Applicant extends User {
             this.role = applicant.role;
             this.vehicle = applicant.vehicle;
             this.status = applicant.status;
+            this.testAppointment = applicant.testAppointment;
             this.reason = applicant.reason;
             return this;
         }

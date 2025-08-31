@@ -93,7 +93,7 @@ public class Payment {
                 ", cardName='" + cardholderName + '\'' +
                 ", cardNumber=" + cardNumber +
                 ", cardDate=" + expiryDate +
-                ", cvs=" + cvv +
+                ", cvv=" + cvv +
                 '}';
     }
 
@@ -192,7 +192,7 @@ public class Payment {
     }
     public enum PaymentMethod{
         Card,
-        Cash();
+        Cash
     }
 }
 

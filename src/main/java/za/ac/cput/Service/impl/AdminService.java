@@ -85,6 +85,15 @@ public class AdminService implements IAdminService {
         return applicantRepository.findAll();
     }
 
+    @Override
+    public boolean deleteApplicant(Integer id) {
+        if (applicantRepository.existsById(id)) {
+            applicantRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     // --- Bookings ---
     @Override
     public List<Bookings> getBookings() {
@@ -165,6 +174,7 @@ public class AdminService implements IAdminService {
         }
         return false;
     }
+
     public Applicant updateApplicantStatus(Integer id, String statusStr, String reason) {
         Applicant applicant = applicantRepository.findById(id).orElse(null);
         if (applicant == null) return null;
@@ -178,6 +188,4 @@ public class AdminService implements IAdminService {
             throw new IllegalArgumentException("Invalid status value. Use PENDING, ACCEPTED, or REJECTED.");
         }
     }
-
-
 }

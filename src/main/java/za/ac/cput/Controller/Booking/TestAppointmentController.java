@@ -1,72 +1,51 @@
 package za.ac.cput.Controller.Booking;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import za.ac.cput.Domain.User.Applicant;
 import za.ac.cput.Domain.bookings.TestAppointment;
-import za.ac.cput.Factory.bookings.TestAppointmentFactory;
 import za.ac.cput.Service.impl.TestAppointmentService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/test-appointments")
+@RequestMapping("/test-appointments")
+@CrossOrigin(origins = "http://localhost:3000") //updated
 public class TestAppointmentController {
+    private TestAppointmentService testAppointmentService;
 
-    private final TestAppointmentService service;
-
-    public TestAppointmentController(TestAppointmentService service) {
-        this.service = service;
+    @Autowired
+    public TestAppointmentController(TestAppointmentService testAppointmentService) {
+        this.testAppointmentService = testAppointmentService;
     }
 
-    // CREATE
     @PostMapping("/create")
-    public ResponseEntity<TestAppointment> create(@RequestBody TestAppointment appointment) {
-        // Factory validation
-        TestAppointment created = TestAppointmentFactory.createTestAppointment(
-                appointment.getTestAddress(),
-                appointment.getTestVenue(),
-                appointment.getTestDate(),
-                appointment.getTestResult(),
-                appointment.getLicenseCode(),
-                appointment.getTestype()
-        );
-
-        if (created == null) {
-            return ResponseEntity.badRequest().build(); // Invalid input
-        }
-
-        TestAppointment saved = service.create(created);
-        return ResponseEntity.ok(saved);
+    public TestAppointment create(@RequestBody TestAppointment testAppointment) {
+        return testAppointmentService.create(testAppointment);
     }
 
-    // READ by ID
     @GetMapping("/read/{id}")
-    public ResponseEntity<TestAppointment> read(@PathVariable Long id) {
-        TestAppointment appointment = service.read(id);
-        return (appointment != null) ? ResponseEntity.ok(appointment) : ResponseEntity.notFound().build();
+    public TestAppointment read(@PathVariable Long id) {
+        return testAppointmentService.read(id);
     }
 
-    // UPDATE
     @PutMapping("/update")
-    public ResponseEntity<TestAppointment> update(@RequestBody TestAppointment appointment) {
-        if (appointment.getTestAppointmentId() == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        TestAppointment updated = service.update(appointment);
-        return ResponseEntity.ok(updated);
+    public TestAppointment update(@RequestBody TestAppointment testAppointment) {
+        return testAppointmentService.update(testAppointment);
     }
-//
-//    // DELETE
+
 //    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable Long id) {
-//        service.delete(id);
-//        return ResponseEntity.noContent().build();
+//    public boolean delete(@PathVariable Long id) {
+//        return testAppointmentService.delete(id);
 //    }
 
-    // GET ALL
-    @GetMapping("/getall")
-    public ResponseEntity<List<TestAppointment>> getAll() {
-        List<TestAppointment> list = service.getAll();
-        return ResponseEntity.ok(list);
+    @GetMapping("/getAll")
+    public List<TestAppointment> getAll() {
+        return testAppointmentService.getAll();
     }
+    @GetMapping("/by-applicant/{applicantId}")
+    public List<TestAppointment> getByApplicant(@PathVariable Long applicantId) {
+        return testAppointmentService.getByApplicantId(applicantId);
+    }
+
 }

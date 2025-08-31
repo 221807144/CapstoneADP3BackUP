@@ -7,12 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import za.ac.cput.Domain.User.Applicant;
 import za.ac.cput.Service.impl.ApplicantService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000") // ✅ allow frontend calls
+@CrossOrigin(origins = "http://localhost:3000") // allow frontend calls
 @RestController
 @RequestMapping("/applicants")
 public class ApplicantController {
@@ -24,12 +22,14 @@ public class ApplicantController {
         this.applicantService = applicantService;
     }
 
+    // Create a new applicant
     @PostMapping("/create")
-    public ResponseEntity<Applicant> create(@RequestBody Applicant applicant) {
+    public ResponseEntity<Applicant> create(@RequestBody Applicant applicant) { //updated
         Applicant created = applicantService.create(applicant);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    // Read an applicant by ID
     @GetMapping("/read/{id}")
     public ResponseEntity<Applicant> read(@PathVariable Integer id) {
         Applicant applicant = applicantService.read(id);
@@ -39,6 +39,7 @@ public class ApplicantController {
         return ResponseEntity.ok(applicant);
     }
 
+    // Update an applicant
     @PutMapping("/update")
     public ResponseEntity<Applicant> update(@RequestBody Applicant applicant) {
         Applicant updated = applicantService.update(applicant);
@@ -48,21 +49,16 @@ public class ApplicantController {
         return ResponseEntity.ok(updated);
     }
 
-
+    // Get all applicants
     @GetMapping("/getAll")
     public ResponseEntity<List<Applicant>> getAll() {
         List<Applicant> applicants = applicantService.getAll();
         return ResponseEntity.ok(applicants);
     }
 
+    // Login endpoint: returns full applicant object
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Applicant loginRequest) {
-        if (loginRequest.getContact() == null || loginRequest.getContact().getEmail() == null) {
-            return ResponseEntity.badRequest().body("Email is required");
-        }
-        if (loginRequest.getPassword() == null) {
-            return ResponseEntity.badRequest().body("Password is required");
-        }
 
         Optional<Applicant> applicantOpt = applicantService.getAll().stream()
                 .filter(a -> a.getContact() != null
@@ -72,14 +68,8 @@ public class ApplicantController {
         if (applicantOpt.isPresent()) {
             Applicant applicant = applicantOpt.get();
             if (loginRequest.getPassword().equals(applicant.getPassword())) {
-                // Return only a message and minimal user info
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "Login successful!");
-                response.put("userId", applicant.getUserId());
-                response.put("firstName", applicant.getFirstName());
-                response.put("lastName" , applicant.getLastName()) ;
-                response.put("idNumber" , applicant.getIdNumber());// optional, for frontend display
-                return ResponseEntity.ok(response);
+                // Return the full applicant object
+                return ResponseEntity.ok(applicant);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
             }
@@ -89,7 +79,3 @@ public class ApplicantController {
     }
 
 }
-
-
-
-

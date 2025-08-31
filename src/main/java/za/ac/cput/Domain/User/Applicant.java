@@ -19,11 +19,12 @@ public class Applicant extends User {
     private License license;
 
     @OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<Vehicle> vehicle;
 
     @Enumerated(EnumType.STRING)
     protected Status status;
+//    @JsonManagedReference
 
     private String reason;
 

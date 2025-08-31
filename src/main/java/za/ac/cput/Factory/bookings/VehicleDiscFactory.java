@@ -9,6 +9,7 @@ public class VehicleDiscFactory {
     public static VehicleDisc createVehicleDisc(
             LocalDate issueDate,
             LocalDate expiryDate
+//            Vehicle vehicle
     ){
 
     if(!Helper.isDiscValid(issueDate, expiryDate))

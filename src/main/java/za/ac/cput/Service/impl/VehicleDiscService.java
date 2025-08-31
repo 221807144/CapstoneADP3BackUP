@@ -6,6 +6,7 @@ import za.ac.cput.Domain.bookings.VehicleDisc;
 import za.ac.cput.Repository.VehicleDiscRepository;
 import za.ac.cput.Service.IVehicleDiscService;
 
+import java.time.LocalDate;
 import java.util.List;
 @Service
 public class VehicleDiscService implements IVehicleDiscService {
@@ -41,5 +42,10 @@ public class VehicleDiscService implements IVehicleDiscService {
     @Override
     public List<VehicleDisc> getAll() {
         return this.repository.findAll();
+    }
+
+    // New method to get all expired discs
+    public List<VehicleDisc> getExpiredDiscs() {
+        return this.repository.findExpiredDiscs(LocalDate.now());
     }
 }

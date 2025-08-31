@@ -42,4 +42,9 @@ public class VehicleDiscController {
         return vehicleDiscService.getAll();
     }
 
+    @GetMapping("/expired")
+    public List<VehicleDisc> getExpiredDiscs() {
+        return vehicleDiscService.getExpiredDiscs();
+    }
+
 }

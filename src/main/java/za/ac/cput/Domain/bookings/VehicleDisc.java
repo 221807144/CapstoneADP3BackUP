@@ -3,10 +3,8 @@ package za.ac.cput.Domain.bookings;
 /*VehicleDisc POJO class
 Author: Sibahle shange (222529571)*/
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import za.ac.cput.Domain.Registrations.Vehicle;
 
 import java.time.LocalDate;
 @Entity
@@ -16,6 +14,9 @@ public class VehicleDisc {
     private Long discId;
     private LocalDate issueDate;
     private LocalDate expiryDate;
+//
+//    @OneToOne(mappedBy = "vehicleDisc")
+//    private Vehicle vehicle;
 
     public VehicleDisc() {
     }
